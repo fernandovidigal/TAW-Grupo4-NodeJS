@@ -2,10 +2,6 @@ const User = require('../models/User'); // Importa o modelo Mongoose
 const jwt = require('jsonwebtoken'); // Para criar tokens de sessão
 const bcrypt = require("bcrypt"); // Para encriptar a password
 
-// TODO: Passar o JWT_SECRET e TOKEN_EXPIRATION para .env
-const JWT_SECRET = '2A4a22DPVGYQMJy9hkH3&ZX7X##p!zxZdDvz'; 
-const TOKEN_EXPIRATION = '1h';
-
 const saltRounds = 10;
 
 exports.register = async (req, res) => {
@@ -59,40 +55,40 @@ exports.login = async (req, res) => {
     try {
         const { identifier, password } = req.body; // 'identifier' pode ser username ou e-mail
  
-            // Encontrar o utilizador com base no username ou e-mail
-            const user = await User.findOne({ 
-                $or: [{ username: identifier }, { email: identifier }] 
+        // Encontrar o utilizador com base no username ou e-mail
+        const user = await User.findOne({ 
+            $or: [{ username: identifier }, { email: identifier }] 
+        });
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciais inválidas.'
             });
- 
-            if (!user) {
-                return res.status(401).json({
-                    success: false,
-                    message: 'Credenciais inválidas.'
-                });
-            }
- 
-            // Verifica se a password é válida. Compara com a hash que está guardada na base de dados
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-            if(!isPasswordValid){
-                return res.status(401).json({
-                    success: false, message: 'Credenciais inválidas.'
-                });
-            }
- 
-           // Geração do JWT (JSON Web Tokens)
-           // O payload deve conter a informação mínima necessária para identificar o utilizador e autorização
-            const payload = {
-                id: user._id,
-                username: user.username,
-                isAdmin: user.isAdmin
-            };
- 
-            const token = jwt.sign(payload, JWT_SECRET, { 
-                expiresIn: TOKEN_EXPIRATION 
+        }
+
+        // Verifica se a password é válida. Compara com a hash que está guardada na base de dados
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid){
+            return res.status(401).json({
+                success: false, message: 'Credenciais inválidas.'
             });
- 
-            // Resposta de Sucesso
-            res.status(200).json({
+        }
+
+        // Geração do JWT (JSON Web Tokens)
+        // O payload deve conter a informação mínima necessária para identificar o utilizador e autorização
+        const payload = {
+            id: user._id,
+            username: user.username,
+            isAdmin: user.isAdmin
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { 
+            expiresIn: process.env.TOKEN_EXPIRATION 
+        });
+
+        // Resposta de Sucesso
+        res.status(200).json({
             success: true,
             message: 'Login bem-sucedido.',
             token, // Este token deverá ser guardado no frontend (localStorage)

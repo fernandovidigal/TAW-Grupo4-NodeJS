@@ -1,8 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-// TODO: Passar o JWT_SECRET para .env
-const JWT_SECRET = '2A4a22DPVGYQMJy9hkH3&ZX7X##p!zxZdDvz'; 
-
 exports.verifyToken = async (req, res, next) => {
     // Verifica se o token existe no cabeçalho do pedido
     const authHeader = req.headers['authorization'];
@@ -24,7 +21,7 @@ exports.verifyToken = async (req, res, next) => {
     }
 
     try {
-        const decodedToken = jwt.verify(token, JWT_SECRET);
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = decodedToken;
         next();
