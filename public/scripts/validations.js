@@ -106,6 +106,59 @@ const validateLoginFields = (inputs) => {
         }
     });
 
+    return allFieldsValid;  
+}
+
+// Mesma explicação que a função anterior, mas neste caso para os campos de registo
+const validateFields = (inputs) => {
+    allFieldsValid = true;
+
+    inputs.forEach((input) => {
+        switch(input.name){
+            case "username":
+                const isUsernameValid = validarUsername(input.value);
+                allFieldsValid = !allFieldsValid ? false : isUsernameValid;
+                if(!isUsernameValid) mostrarErro("Username inválido", input);
+                break;
+            case "password":
+                const isPasswordValid = validarPassword(input.value);
+                allFieldsValid = !allFieldsValid ? false : isPasswordValid;
+                if(!isPasswordValid) mostrarErro("Minímo de 6 caracteres", input);
+                break;
+            case "foto":
+                const isFotoValid = validaFotografia();
+                allFieldsValid = !allFieldsValid ? false : isFotoValid;
+                if(!isFotoValid) mostrarErro("Fotografia inválida", input);
+                break;
+            case "nome":
+                const isNomeValid = validarNome(input.value);
+                allFieldsValid = !allFieldsValid ? false : isNomeValid;
+                if(!isNomeValid) mostrarErro("Nome inválido", input);
+                break;
+            case "email":
+                const isEmailValid = validarEmail(input.value);
+                allFieldsValid = !allFieldsValid ? false : isEmailValid;
+                if(!isEmailValid) mostrarErro("Email inválido", input);
+                break;
+            case "telemovel":
+                const isTelemovelValid = validarNumerosTelemovel(input.value);
+                allFieldsValid = !allFieldsValid ? false : isTelemovelValid;
+                if(!isTelemovelValid) mostrarErro("Número de telemóvel inválido", input);
+                break;
+            case "nif":
+                const isNIFValid = validarNumerosNoveDigitos(input.value);
+                allFieldsValid = !allFieldsValid ? false : isNIFValid;
+                if(!isNIFValid) mostrarErro("NIF inválido", input);
+                break;
+            case "morada":
+                const isMoradaValid = validaTexto(input.value);
+                allFieldsValid = !allFieldsValid ? false : isMoradaValid;
+                if(!isMoradaValid) mostrarErro("Morada inválida", input);
+                break;
+            default:
+                break;
+        }
+    });
+
     return allFieldsValid;
-    
 }

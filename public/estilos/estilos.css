@@ -201,6 +201,10 @@ button {
     margin-bottom: 0.75em;
 }
 
+button svg {
+    fill: #fff;
+}
+
 .entrar_button {
 
     background-color: rgb(90,195,178);
@@ -292,4 +296,18 @@ button {
     background-color: rgb(220, 53, 69);
     font-weight: bold;
     color: #fff;
+}
+
+.users_list thead tr th {
+    background-color: #ccc;
+}
+
+.users_list tbody tr td {
+    padding: 0.2em;
+}
+
+.users_list tbody tr td .userImg {
+    border-radius: 50%;
+    height: 52px;
+    width: 52px;
 }

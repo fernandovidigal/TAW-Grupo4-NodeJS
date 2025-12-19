@@ -1,3 +1,4 @@
+import { mostraPagina, navigate } from './router.js';
 
 document.addEventListener("DOMContentLoaded", function(e){
     mostraPagina();

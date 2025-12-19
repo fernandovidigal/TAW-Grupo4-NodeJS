@@ -1,67 +1,6 @@
 const formContainer = document.querySelector('.main_container');
 
 
-
-
-
-
-
-
-
-// Mesma explicação que a função anterior, mas neste caso para os campos de registo
-const validateFields = (inputs) => {
-    allFieldsValid = true;
-
-    inputs.forEach((input) => {
-        switch(input.name){
-            case "username":
-                const isUsernameValid = validarUsername(input.value);
-                allFieldsValid = !allFieldsValid ? false : isUsernameValid;
-                if(!isUsernameValid) mostrarErro("Username inválido", input);
-                break;
-            case "password":
-                const isPasswordValid = validarPassword(input.value);
-                allFieldsValid = !allFieldsValid ? false : isPasswordValid;
-                if(!isPasswordValid) mostrarErro("Minímo de 6 caracteres", input);
-                break;
-            case "foto":
-                const isFotoValid = validaFotografia();
-                allFieldsValid = !allFieldsValid ? false : isFotoValid;
-                if(!isFotoValid) mostrarErro("Fotografia inválida", input);
-                break;
-            case "nome":
-                const isNomeValid = validarNome(input.value);
-                allFieldsValid = !allFieldsValid ? false : isNomeValid;
-                if(!isNomeValid) mostrarErro("Nome inválido", input);
-                break;
-            case "email":
-                const isEmailValid = validarEmail(input.value);
-                allFieldsValid = !allFieldsValid ? false : isEmailValid;
-                if(!isEmailValid) mostrarErro("Email inválido", input);
-                break;
-            case "telemovel":
-                const isTelemovelValid = validarNumerosTelemovel(input.value);
-                allFieldsValid = !allFieldsValid ? false : isTelemovelValid;
-                if(!isTelemovelValid) mostrarErro("Número de telemóvel inválido", input);
-                break;
-            case "nif":
-                const isNIFValid = validarNumerosNoveDigitos(input.value);
-                allFieldsValid = !allFieldsValid ? false : isNIFValid;
-                if(!isNIFValid) mostrarErro("NIF inválido", input);
-                break;
-            case "morada":
-                const isMoradaValid = validaTexto(input.value);
-                allFieldsValid = !allFieldsValid ? false : isMoradaValid;
-                if(!isMoradaValid) mostrarErro("Morada inválida", input);
-                break;
-            default:
-                break;
-        }
-    });
-
-    return allFieldsValid;
-}
-
 // Converte o ficheiro de imagem carregado para Base64
 // foi necessário esta conversão porque por segurança dos browsers, estes
 // não têm permissão para ler ficheiros locais.
@@ -132,71 +71,6 @@ const checkValidUserCredentials = (user, allUsers) => {
     }
 
     return userData;
-}
-
-// Cria o formulário de login quando o DOM é carregado
-document.addEventListener('DOMContentLoaded', function(e){
-    cleanHTML();
-    createFormLogin(formContainer);
-});
-
-const buildProfilePage = () => {
-    cleanHTML();
-
-    const user = {
-        "username": "user",
-        "email": "user@projeto.pt",
-        "password": "SenhaSegura123",
-        "nome": "Utilizador",
-        "nif": "999999999",
-        "morada": "Rua do Projeto"
-    };
-
-    const profileContent = document.createElement('DIV');
-    profileContent.classList.add("profile_content");
-
-    const profileDetails = document.createElement('DIV');
-    profileDetails.classList.add("profile_details");
-
-    const profileHeader = document.createElement("H3");
-    profileHeader.textContent = "Olá " + user.nome;
-    profileDetails.appendChild(profileHeader);
-
-    const profileTable = document.createElement("TABLE");
-
-    const profileTableBody = document.createElement("TBODY");
-
-    // Linha para nome
-    const nomeRow = createTableRow("Nome:", user.nome);
-    profileTableBody.appendChild(nomeRow);
-
-    // Linha para Email
-    const emailRow = createTableRow("Email:", user.email);
-    profileTableBody.appendChild(emailRow);
-
-    // Linha para Telemóvel
-    const telemovelRow = createTableRow("Telemóvel:", user.telemovel);
-    profileTableBody.appendChild(telemovelRow);
-
-    // Linha para Username
-    const usernameRow = createTableRow("Uername:", user.username);
-    profileTableBody.appendChild(usernameRow);
-
-    // Linha para NIF
-    const nifRow = createTableRow("Username:", user.nif);
-    profileTableBody.appendChild(nifRow);
-
-    // Linha para Morada
-    const moradaRow = createTableRow("Morada:", user.morada);
-    profileTableBody.appendChild(moradaRow);
-
-    profileTable.appendChild(profileTableBody);
-
-    profileDetails.appendChild(profileTable);
-
-
-    // TODO: FALTA O RESTO DO LAYOUT
-    
 }
 
 if(formContainer){

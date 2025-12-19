@@ -1,37 +1,7 @@
-const mostraPagina = () => {
-    const app = document.querySelector(".app");
-    const path = window.location.pathname;
+import { navigate } from './router.js';
+import { limparErros, createUserRow, BuildFormData } from './utils.js';
 
-    app.innerHTML = '';
-
-    switch(path){
-        case '/':
-            indexPage(app);
-            break;
-        case '/login':
-            loginPage(app);
-            break;
-        case '/registo':
-            registoPage(app);
-            break;
-        case '/profile':
-            profilePage(app);
-            break;
-        case '/users':
-            usersPage(app);
-            break;
-        default:
-            //mostraPaginaNaoEncontrada();
-            break;
-    }
-}
-
-const navigate = (path) => {
-    window.history.pushState({}, '', path);
-    mostraPagina();
-}
-
-const indexPage = (app) => {
+export function indexPage(app){
     app.innerHTML = `
         <div class="index_container">
             <section>
@@ -74,7 +44,7 @@ const indexPage = (app) => {
     `;
 }
 
-const loginPage = (app) => {
+export function loginPage(app){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
 
@@ -113,7 +83,7 @@ const loginPage = (app) => {
 
     registoButton.addEventListener('click', function(e){
         e.preventDefault();
-        navigate('/registo');
+        navigate('/register');
     });
 
     appContainer.appendChild(formWrapper);
@@ -121,7 +91,7 @@ const loginPage = (app) => {
     app.appendChild(appContainer);
 }
 
-const registoPage = (app) => {
+export function registoPage(app){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
 
@@ -129,6 +99,7 @@ const registoPage = (app) => {
     appContainer.appendChild(formHeader);
 
     const formWrapper = createFormWrapper("registo");
+    formWrapper.setAttribute("enctype", "multipart/form-data");
 
     const usernameInput = createTextFormElement("username", "Username:");
     formWrapper.appendChild(usernameInput);
@@ -136,7 +107,7 @@ const registoPage = (app) => {
     const passwordInput = createTextFormElement("password", "Password:", "password");
     formWrapper.appendChild(passwordInput);
 
-    const fileUploadInput = createFileUploadElement("foto", "Foto de perfil: ");
+    const fileUploadInput = createFileUploadElement("fotografia", "Foto de perfil: ");
     formWrapper.appendChild(fileUploadInput);
 
     const nomeInput = createTextFormElement("nome", "Nome:");
@@ -157,6 +128,26 @@ const registoPage = (app) => {
     const entrarBtn = createButton("registar", "registar", "Registar", "submit");
     formWrapper.appendChild(entrarBtn);
 
+    entrarBtn.addEventListener("click", function(e){
+        e.preventDefault();
+            
+        const formElements = document.getElementsByName("registo")[0];
+        const allInputs = formElements.querySelectorAll("input");
+            
+        limparErros(allInputs);
+
+        const isValid = validateFields(allInputs);
+
+        if(isValid){
+            const formData = new FormData();
+            formData.append("nome", "aaaaaa");
+            formData.append("email", "bbbbbb");
+
+            /*const formData = BuildFormData(allInputs);*/
+            console.log(formData);
+        }
+    });
+
     const loginButton = createButton("mudar_login", "mudar_login", "Mudar para Login");
     formWrapper.appendChild(loginButton);
 
@@ -170,7 +161,7 @@ const registoPage = (app) => {
     app.appendChild(appContainer);
 }
 
-const profilePage = (app) => {
+export function profilePage(app){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
 
@@ -248,8 +239,7 @@ const profilePage = (app) => {
 
     logoutButton.addEventListener("click", function(e){
         e.preventDefault();
-        window.history.replaceState({}, '', '/');
-        navigate('/');
+        navigate('/', true);
     });
 
     appContainer.appendChild(logoutButton);
@@ -257,9 +247,68 @@ const profilePage = (app) => {
     app.appendChild(appContainer);
 }
 
-const usersPage = (app) => {
+export function usersPage(app){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
+
+    appContainer.innerHTML = `
+        <h3>Lista de Utilizadores</h3>
+        <table class="users_list">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    `;
+
+    const users = [
+        {
+            id: 14111443,
+            nome: "Fernando3",
+            email: "efsgs3@asd.pt",
+            fotografia: "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"
+        },
+        {
+            id: 14111444,
+            nome: "Fernando4",
+            email: "efsgs4@asd.pt",
+            fotografia: "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"
+        },
+        {
+            id: 14111445,
+            nome: "Fernando5",
+            email: "efsgs5@asd.pt",
+            fotografia: "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"
+        }
+    ];
+
+    const usersList = appContainer.querySelector('table.users_list tbody');
+
+    // Fazer o fetch dos utilizadores
+
+    users.forEach((user) => {
+        usersList.appendChild(createUserRow(user));
+    });
+
+    const usersTable = appContainer.querySelector('table.users_list');
+    usersTable.addEventListener("click", function(e){
+        const delBtn = e.target.closest(".delete_button");
+        console.log(delBtn);
+        if(!delBtn) return;
+
+        const tRow = delBtn.closest("tr");
+        if(!tRow) return;
+
+        const confirmDelete = confirm("Deseja eliminar o utilizador?");
+        
+        // TODO: Pedido ao nodejs para eliminar
+        if(confirmDelete) tRow.remove();
+    });
 
     app.appendChild(appContainer);
 }

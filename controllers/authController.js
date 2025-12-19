@@ -1,6 +1,7 @@
 const User = require('../models/User'); // Importa o modelo Mongoose
 const jwt = require('jsonwebtoken'); // Para criar tokens de sessão
 const bcrypt = require("bcrypt"); // Para encriptar a password
+const cloudinary = require("cloudinary").v2;
 
 const saltRounds = 10;
 
@@ -10,33 +11,55 @@ exports.register = async (req, res) => {
  
         // Validação de Unicidade
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-            if (existingUser) {
-                return res.status(409).json({
-                    success: false, 
-                    message: 'Username ou email já registados.'
-                });
-            }
-
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-            // Criar o novo utilizador
-            const newUser = new User({
-                username,
-                email,
-                password: hashedPassword,
-                nome,
-                telemovel,
-                nif,
-                morada,
-                fotografia,
-                // A flag isAdmin é 'false' por defeito (definido no Schema)
+        if (existingUser) {
+            return res.status(409).json({
+                success: false, 
+                message: 'Username ou email já registados.'
             });
- 
-            // Guardar no MongoDB o novo utilizador que criámos
-            await newUser.save();
- 
-            // Resposta de Sucesso
-            res.status(201).json({ 
+        }
+
+        if(!req.file){
+            return res.status(400).json({
+                success: false, 
+                message: 'Não foi enviada nenhuma fotografia.'
+            }); 
+        }
+
+        // Upload da fotografia para o CDN Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                (error, uploaded) => (error ? reject(error) : resolve(uploaded))
+            );
+            stream.end(req.file.buffer);
+        });
+
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Criar o novo utilizador
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+            nome,
+            telemovel,
+            nif,
+            morada,
+            fotografia,
+            imageUrl: uploadResult.secure_url,
+            public_id: uploadResult.public_id,
+            width: uploadResult.width,
+            height: uploadResult.height,
+            format: uploadResult.format,
+            // A flag isAdmin é 'false' por defeito (definido no Schema)
+        });
+
+        console.log(newUser);
+
+        // Guardar no MongoDB o novo utilizador que criámos
+        //await newUser.save();
+
+        // Resposta de Sucesso
+        res.status(201).json({ 
             success: true, 
             message: 'Utilizador registado com sucesso.',
             user: { username: newUser.username, email: newUser.email, nome: newUser.nome }

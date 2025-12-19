@@ -22,11 +22,26 @@ app.use(express.json()); // Configura o Express para processar pedidos que chega
 
 app.use(cors());                   // Para simplificar, vamos permitir todas as origens
 app.use(morgan('tiny'));   // Existem outros presets que podem usar: dev, combined, common, ou short
-app.use(helmet());                // Define cabeçalhos de resposta HTTP relacionados com a segurança
+app.use(helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        // ajuste o domínio do seu CDN
+        "img-src": ["'self'", "https://images.pexels.com", "data:"], 
+        // se precisar de blob: para object URLs
+        // "img-src": ["'self'", "https://cdn.seu-cdn.com", "data:", "blob:"],
+      },
+    },
+  }));                // Define cabeçalhos de resposta HTTP relacionados com a segurança
 
 // Rotas
 app.use('/api/auth', authRoutes); // Usar as rotas da API sob o prefixo /api/auth
 app.use('/api/users', userRoutes);
+
+// Serve o ficheiro da página SPA
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
  
 // Define a string de conexão a partir da variável de ambiente (MONGO_URI)
 const DB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/projeto-db';
@@ -34,6 +49,7 @@ const DB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/projeto-db';
 mongoose.connect(DB_URI) // Inicia a tentativa de conexão assíncrona à base de dados MongoDB
     .then(() => { // Esta função é executada apenas se a ligação à base de dados for bem-sucedida
         console.log('Ligação bem-sucedida ao MongoDB!');
+
         app.listen(PORT, () => { // Servidor iniciado
             console.log(`O Servidor Express encontra-se em execução na porta ${PORT}`);
         });
