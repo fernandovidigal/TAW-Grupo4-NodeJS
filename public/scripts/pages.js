@@ -1,5 +1,5 @@
 import { navigate } from './router.js';
-import { limparErros, createUserRow, BuildFormData } from './utils.js';
+import { API_BASE_URL, limparErros, createUserRow, buildFormData, showLoadingMessage, showSuccessMessage, showErrorMessage } from './utils.js';
 
 export function indexPage(app){
     app.innerHTML = `
@@ -53,7 +53,7 @@ export function loginPage(app){
 
     const formWrapper = createFormWrapper("login");
 
-    const usernameInput = createTextFormElement("username", "Username:");
+    const usernameInput = createTextFormElement("identifier", "Username:");
     formWrapper.appendChild(usernameInput);
 
     const passwordInput = createTextFormElement("password", "Password:", "password");
@@ -73,7 +73,25 @@ export function loginPage(app){
         const isValid = validateLoginFields(allInputs);
 
         if(isValid){
-            navigate('/profile');
+            const formData = buildFormData(allInputs);
+
+            console.log([...formData]);
+
+            fetch(API_BASE_URL + "/auth/login", {
+                method: 'POST',
+                body: formData
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if(data.success){
+                    showSuccessMessage(data.message, "/profile");
+                } else {
+                    showErrorMessage(data.message);
+                }
+            })
+            .catch((err) => {
+                showErrorMessage(err);
+            });
         }
         
     });
@@ -95,8 +113,8 @@ export function registoPage(app){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
 
-    const formHeader = createHeader("Registo de Novo Utilizador");
-    appContainer.appendChild(formHeader);
+    const header = createHeader("Registo de Novo Utilizador");
+    appContainer.appendChild(header);
 
     const formWrapper = createFormWrapper("registo");
     formWrapper.setAttribute("enctype", "multipart/form-data");
@@ -139,12 +157,25 @@ export function registoPage(app){
         const isValid = validateFields(allInputs);
 
         if(isValid){
-            const formData = new FormData();
-            formData.append("nome", "aaaaaa");
-            formData.append("email", "bbbbbb");
+            const formData = buildFormData(allInputs);
 
-            /*const formData = BuildFormData(allInputs);*/
-            console.log(formData);
+            showLoadingMessage("A registar...");
+            
+            fetch(API_BASE_URL + "/auth/register", {
+                method: 'POST',
+                body: formData
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if(data.success){
+                    showSuccessMessage(data.message, "/login");
+                } else {
+                    showErrorMessage(data.message);
+                }
+            })
+            .catch((err) => {
+                showErrorMessage(err);
+            });
         }
     });
 

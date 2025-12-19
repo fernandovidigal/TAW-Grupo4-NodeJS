@@ -67,6 +67,8 @@ const validaTexto = (texto) => {
     // O texto deve ter 3 ou mais caracteres
     if(texto.length < 3) return false;
 
+    if(/[<&/\\>]/.test(texto)) return false;
+
     return true
 }
 

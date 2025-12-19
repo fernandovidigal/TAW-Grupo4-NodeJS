@@ -39,7 +39,8 @@ const UserSchema = new mongoose.Schema({ // Cria um novo Esquema Mongoose, defin
         required: true
     },
     fotografia: {
-        type: Buffer
+        type: String,
+        required: true
     },
     // Campo de Autorização (Para a área de Administrador)
     isAdmin: {

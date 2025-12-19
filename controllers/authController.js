@@ -2,12 +2,22 @@ const User = require('../models/User'); // Importa o modelo Mongoose
 const jwt = require('jsonwebtoken'); // Para criar tokens de sessão
 const bcrypt = require("bcrypt"); // Para encriptar a password
 const cloudinary = require("cloudinary").v2;
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const saltRounds = 10;
 
+// Cloudinary CDN Configuration
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, nome, telemovel, nif, morada, fotografia } = req.body;
+        const { username, email, password, nome, telemovel, nif, morada } = req.body;
  
         // Validação de Unicidade
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -44,19 +54,14 @@ exports.register = async (req, res) => {
             telemovel,
             nif,
             morada,
-            fotografia,
-            imageUrl: uploadResult.secure_url,
-            public_id: uploadResult.public_id,
-            width: uploadResult.width,
-            height: uploadResult.height,
-            format: uploadResult.format,
+            fotografia: uploadResult.secure_url
             // A flag isAdmin é 'false' por defeito (definido no Schema)
         });
 
         console.log(newUser);
 
         // Guardar no MongoDB o novo utilizador que criámos
-        //await newUser.save();
+        await newUser.save();
 
         // Resposta de Sucesso
         res.status(201).json({ 
@@ -76,6 +81,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+        console.log(req.body);
         const { identifier, password } = req.body; // 'identifier' pode ser username ou e-mail
  
         // Encontrar o utilizador com base no username ou e-mail

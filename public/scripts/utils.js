@@ -1,3 +1,7 @@
+import { navigate } from './router.js';
+
+export const API_BASE_URL = 'http://localhost:3030/api';
+
 export function cleanHTML() {
     if(formContainer){
         formContainer.innerHTML = "";
@@ -48,17 +52,51 @@ export function createUserRow(user){
     return tRow;
 }
 
-export function BuildFormData(inputs){
+export function buildFormData(inputs){
     const formData = new FormData();
-    /*inputs.forEach((input) => {
+    inputs.forEach((input) => {
         if(input.name === "fotografia"){
-            //formData.append("fotografia", input.files[0]);
+            formData.append("fotografia", input.files[0]);
         } else {
             formData.append(input.name, input.value);
         }
-    });*/
-    formData.append("nome", "aaaaaa");
-    formData.append("email", "bbbbbb");
+    });
 
     return formData;
+}
+
+export function showLoadingMessage(texto) {
+    Swal.fire({
+        title: texto,
+        text: 'Por favor, aguarde.',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+export function showSuccessMessage(message, path, pathReplace = false){
+    Swal.fire({
+        title: 'Sucesso',
+        text: message,
+        icon: 'success',
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        timer: 2000,
+        timerProgressBar: true,
+    }).then(() => {
+        navigate(path, pathReplace);
+    });
+} 
+
+export function showErrorMessage(message) {
+    Swal.fire({
+        title: 'Erro',
+        text: message,
+        icon: 'error',
+        showConfirmButton: true,
+    });
 }

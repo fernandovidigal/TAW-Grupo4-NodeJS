@@ -26,13 +26,10 @@ app.use(helmet({
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        // ajuste o domínio do seu CDN
-        "img-src": ["'self'", "https://images.pexels.com", "data:"], 
-        // se precisar de blob: para object URLs
-        // "img-src": ["'self'", "https://cdn.seu-cdn.com", "data:", "blob:"],
+        "img-src": ["'self'", "https://res.cloudinary.com"], 
       },
     },
-  }));                // Define cabeçalhos de resposta HTTP relacionados com a segurança
+  }));  // Define cabeçalhos de resposta HTTP relacionados com a segurança
 
 // Rotas
 app.use('/api/auth', authRoutes); // Usar as rotas da API sob o prefixo /api/auth
