@@ -1,0 +1,295 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-size: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+}
+
+
+header {
+    background-color: #333;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    text-align: center;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.index_container {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 1.5em; 
+}
+
+
+.index_container .full-row {
+    grid-column: 1 / -1;
+}
+
+
+@media (max-width: 768px) {
+  .index_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-columns: none;
+    gap: 1.5em;
+  }
+}
+
+
+section {
+    background-color: #fff;
+    padding: 1em;
+    border: solid 1px #ccc;
+    border-radius: 4px;
+}
+
+
+footer {
+    background-color: #333;
+    color: #bbb;
+    text-align: center;
+    padding: 1em;
+}
+
+
+h1 {
+    color: rgb(90,195,178);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+
+h2, h3 {
+    color: rgb(90,195,178);
+    margin-bottom: 0.625em;
+}
+
+
+ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6em;
+}
+
+
+ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+
+ul li a:hover {
+    color: rgb(90,195,178);
+    text-decoration: underline; 
+}
+
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+
+table th, table td {
+    border: solid 1px #ddd;
+    padding: 0.5em;
+    text-align: left;
+    font-size: 0.9em;
+}
+
+
+table td img {
+    width: 3.5rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.app_container {
+    max-width: 650px;
+    width: 100%;
+    background-color: #fff;
+    padding: 2.5em 2em;
+    border-radius: 8px;
+    margin: 2em auto;
+}
+
+.app_container h3 {
+    margin-bottom: 1.5em;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+.app_container form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1.5em;
+    width: 100%;
+    gap: 1em;
+}
+
+.form_control {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+
+.form_control label {
+    display: block;
+    margin-bottom: 0.4em;
+    font-weight: 400;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+
+.form_control input {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+}
+
+button {
+    width: 100%;
+    padding: 0.75em;
+    background-color: rgb(90,195,178);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75em;
+}
+
+.entrar_button {
+
+    background-color: rgb(90,195,178);
+    color: #fff;
+}
+
+.mudar_registo_button {
+    background-color: rgb(90,195,178);
+    color: #fff;
+}
+
+.input-error {
+    border: solid 1px red !important;
+}
+
+.valid-error {
+    color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.profile_container {
+    max-width: 650px;
+    width: 100%;
+    background-color: #fff;
+    padding: 2.5em 2em;
+    border-radius: 8px;
+    margin: 0 auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.profile_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2em;
+    gap: 2em;
+}
+
+.profile_details {
+    flex: 1;
+}
+
+.profile_details h3 {
+    margin-bottom: 1.5em;
+    font-size: 1.3rem;
+    color: rgb(90,195,178);
+    border-bottom: 1px solid #eee; /* Linha subtil abaixo do nome */
+    padding-bottom: 0.5em;
+}
+
+.profile_details table {
+    margin-top: 0;
+}
+
+.profile_details table td {
+    border: none !important; 
+    padding: 0.5em 0;
+    font-size: 1rem;
+}
+
+.profile_details table tr td:nth-child(1) {
+    font-weight: bold ;
+    color: #333;
+    width: 120px;
+}
+
+.profile_details table td:nth-child(2) {
+    color: #555;
+}
+
+.profile_avatar {
+    flex-shrink: 0;
+}
+
+.profile_avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgb(90,195,178);
+    padding: 3px;
+    margin: 0;
+}
+
+.logout_button {
+    background-color: rgb(220, 53, 69);
+    font-weight: bold;
+    color: #fff;
+}

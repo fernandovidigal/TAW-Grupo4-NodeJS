@@ -15,7 +15,7 @@ RUN npm install -g nodemon
 COPY . .
 
 # Expor a porta que a API vai usar
-EXPOSE 3000
+EXPOSE 3030
 
 # Comando para iniciar a API
 CMD [ "npm", "start" ]

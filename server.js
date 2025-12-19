@@ -5,14 +5,17 @@ const helmet = require('helmet');   // Para segurança geral
 const morgan = require('morgan');   // Para logging dos pedidos HTTP do cliente
 const mongoose = require('mongoose'); // Importa o Mongoose para interação com a base de dados
 const dotnev = require('dotenv');
+const path = require('path');
 
 const authRoutes = require('./routes/authRoutes'); // Importar as rotas
 const userRoutes = require('./routes/userRoutes');
  
 const app = express(); // Cria uma instância da aplicação. Será utilizado para definir as rotas, configurações e middleware do servidor
-const PORT = process.env.PORT || 3000; // Define o número da porta de rede onde o servidor web irá estar à escuta de pedidos
+const PORT = process.env.PORT || 3030; // Define o número da porta de rede onde o servidor web irá estar à escuta de pedidos
 
 dotnev.config();
+
+app.use(express.static(path.join(__dirname, 'public')));
  
 // Middlewares
 app.use(express.json()); // Configura o Express para processar pedidos que chegam ao servidor com o header Content-Type: application/json.
