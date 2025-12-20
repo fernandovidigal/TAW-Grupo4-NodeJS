@@ -2,11 +2,11 @@ import { navigate } from './router.js';
 
 export const API_BASE_URL = 'http://localhost:3030/api';
 
-export function cleanHTML() {
+/*export function cleanHTML() {
     if(formContainer){
         formContainer.innerHTML = "";
     }
-}
+}*/
 
 // Limpa os erros de validação
 export function limparErros(inputs){
@@ -105,4 +105,24 @@ export function authorizationFetch(url) {
     const headers = new Headers({});
     if(token) headers.set("Authorization", "Bearer " + token);
     return fetch(API_BASE_URL + url, { headers });
+}
+
+export function buildNavigation(navList){
+    const nav = document.querySelector(".navigation");
+    nav.innerHTML = '';
+
+    const navUL = document.createElement("UL");
+
+    navList.forEach((link) => {
+        const navLI = document.createElement("LI");
+        const navA = document.createElement("A");
+        navA.setAttribute("href", link.path);
+        navA.textContent = link.text;
+
+        navLI.appendChild(navA);
+
+        navUL.appendChild(navLI);
+    });
+
+    nav.appendChild(navUL);
 }

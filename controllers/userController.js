@@ -46,7 +46,8 @@ exports.getUserProfile = async (req, res) => {
                 telemovel: user.telemovel,
                 nif: user.nif,
                 morada: user.morada,
-                fotografia: user.fotografia
+                fotografia: user.fotografia,
+                isAdmin: user.isAdmin
             }
         });
     } catch (error) {

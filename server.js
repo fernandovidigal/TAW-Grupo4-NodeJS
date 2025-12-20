@@ -10,6 +10,8 @@ const path = require('path');
 // Importar as rotas
 const authRoutes = require('./routes/authRoutes'); 
 const userRoutes = require('./routes/userRoutes');
+
+const checkAdmin = require("./utils/admin");
  
 const app = express(); // Cria uma instância da aplicação. Será utilizado para definir as rotas, configurações e middleware do servidor
 const PORT = process.env.PORT || 3030; // Define o número da porta de rede onde o servidor web irá estar à escuta de pedidos
@@ -47,6 +49,9 @@ const DB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/projeto-db';
 mongoose.connect(DB_URI) // Inicia a tentativa de conexão assíncrona à base de dados MongoDB
     .then(() => { // Esta função é executada apenas se a ligação à base de dados for bem-sucedida
         console.log('Ligação bem-sucedida ao MongoDB!');
+
+        // Cria conta de adminstração se não existir
+        checkAdmin.createAdminAccount();
 
         app.listen(PORT, () => { // Servidor iniciado
             console.log(`O Servidor Express encontra-se em execução na porta ${PORT}`);

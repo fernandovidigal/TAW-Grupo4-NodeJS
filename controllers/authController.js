@@ -58,8 +58,6 @@ exports.register = async (req, res) => {
             // A flag isAdmin é 'false' por defeito (definido no Schema)
         });
 
-        console.log(newUser);
-
         // Guardar no MongoDB o novo utilizador que criámos
         await newUser.save();
 
