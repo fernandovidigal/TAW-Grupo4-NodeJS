@@ -75,15 +75,18 @@ export function loginPage(app){
         if(isValid){
             const formData = buildFormData(allInputs);
 
-            console.log([...formData]);
-
             fetch(API_BASE_URL + "/auth/login", {
                 method: 'POST',
-                body: formData
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    identifier: formData.get('identifier'),
+                    password: formData.get('password'),
+                }),
             })
             .then((res) => res.json())
             .then((data) => {
                 if(data.success){
+                    localStorage.setItem("token", data.token);
                     showSuccessMessage(data.message, "/profile");
                 } else {
                     showErrorMessage(data.message);
@@ -192,18 +195,9 @@ export function registoPage(app){
     app.appendChild(appContainer);
 }
 
-export function profilePage(app){
+export function profilePage(app, user){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
-
-    const user = {
-        "username": "user",
-        "email": "user@projeto.pt",
-        "password": "SenhaSegura123",
-        "nome": "Utilizador",
-        "nif": "999999999",
-        "morada": "Rua do Projeto"
-    };
 
     const profileContent = document.createElement('DIV');
     profileContent.classList.add("profile_content");
@@ -250,10 +244,11 @@ export function profilePage(app){
     const profileAvatar = document.createElement('DIV');
     profileAvatar.classList.add("profile_avatar");
 
+    // AVATAR - Image
     const profileAvatarImage = document.createElement('IMG');
     profileAvatarImage.classList.add("user_photo");
     profileAvatarImage.setAttribute("alt", user.name);
-    profileAvatarImage.setAttribute("src", "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"); // ALTERAR PARA A IMAGEM VINDA DO NODEJS
+    profileAvatarImage.setAttribute("src", user.fotografia);
 
     profileAvatar.appendChild(profileAvatarImage);
 
@@ -270,6 +265,7 @@ export function profilePage(app){
 
     logoutButton.addEventListener("click", function(e){
         e.preventDefault();
+        localStorage.removeItem("token");
         navigate('/', true);
     });
 

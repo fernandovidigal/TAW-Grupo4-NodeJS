@@ -7,7 +7,7 @@ const { verifyToken, isAdmin} = require('../middlewares/authMiddleware');
 
 router.get('/', [verifyToken, isAdmin], userController.getUsers); // Rota listar todos os utilizadores
 
-router.get('/profile/:username', verifyToken, userController.getUserProfile); // Rota para o perfil de um utilizador
+router.get('/profile', verifyToken, userController.getUserProfile); // Rota para o perfil de um utilizador
 
 // Rota para o perfil do administrador
 

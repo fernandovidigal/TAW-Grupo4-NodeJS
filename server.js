@@ -7,7 +7,8 @@ const mongoose = require('mongoose'); // Importa o Mongoose para interação com
 const dotnev = require('dotenv');
 const path = require('path');
 
-const authRoutes = require('./routes/authRoutes'); // Importar as rotas
+// Importar as rotas
+const authRoutes = require('./routes/authRoutes'); 
 const userRoutes = require('./routes/userRoutes');
  
 const app = express(); // Cria uma instância da aplicação. Será utilizado para definir as rotas, configurações e middleware do servidor

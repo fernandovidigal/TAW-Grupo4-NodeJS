@@ -1,4 +1,4 @@
-const formContainer = document.querySelector('.main_container');
+/*const formContainer = document.querySelector('.main_container');
 
 
 // Converte o ficheiro de imagem carregado para Base64
@@ -139,4 +139,4 @@ if(formContainer){
             }
         }
     });
-}
+}*/

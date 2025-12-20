@@ -82,7 +82,6 @@ export function showSuccessMessage(message, path, pathReplace = false){
         title: 'Sucesso',
         text: message,
         icon: 'success',
-        showConfirmButton: true,
         allowOutsideClick: false,
         allowEscapeKey: false,
         timer: 2000,
@@ -99,4 +98,11 @@ export function showErrorMessage(message) {
         icon: 'error',
         showConfirmButton: true,
     });
+}
+
+export function authorizationFetch(url) {
+    const token = localStorage.getItem("token");
+    const headers = new Headers({});
+    if(token) headers.set("Authorization", "Bearer " + token);
+    return fetch(API_BASE_URL + url, { headers });
 }

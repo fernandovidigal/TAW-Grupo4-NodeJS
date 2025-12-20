@@ -81,7 +81,6 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        console.log(req.body);
         const { identifier, password } = req.body; // 'identifier' pode ser username ou e-mail
  
         // Encontrar o utilizador com base no username ou e-mail
@@ -100,7 +99,8 @@ exports.login = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(!isPasswordValid){
             return res.status(401).json({
-                success: false, message: 'Credenciais inválidas.'
+                success: false, 
+                message: 'Credenciais inválidas.'
             });
         }
 

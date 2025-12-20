@@ -21,25 +21,18 @@ exports.getUsers = async (req, res) => {
 
 exports.getUserProfile = async (req, res) => {
     try {
-        const username = req.params.username;
-
-        // Verifica se o parametro ID da rota foi enviado
-        if(!username){
-            return res.status(400).json({
-                success: false, 
-                message: 'Username inválido.'
-            });
-        }
+        const {id, username} = req.user;
 
         // Verifica na base de dados se o utilizador existe
         const user = await User.findOne({
+            _id: id,
             username,
         });
 
         if(!user){
             return res.status(400).json({
                 success: false, 
-                message: 'Username não existe.'
+                message: 'Utilizador não encontrado.'
             });
         }
 
