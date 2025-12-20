@@ -2,7 +2,7 @@ const { body, param } = require('express-validator'); // Para sanitização e va
 
 // Validação dos dados enviados pelo formulário de registo
 exports.validateRegisterFields = [
-    body('username').isLength({ min: 3, max: 15 }).trim().escape()
+    body('username').isLength({ min: 3 }).trim().escape()
         .withMessage('Username deve ter entre 3 e 15 caracteres'),
     body('email').isEmail().normalizeEmail()
         .withMessage('Email inválido'),

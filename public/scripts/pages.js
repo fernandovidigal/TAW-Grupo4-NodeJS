@@ -1,5 +1,5 @@
 import { navigate } from './router.js';
-import { API_BASE_URL, limparErros, createUserRow, buildFormData, showLoadingMessage, showSuccessMessage, showErrorMessage, showValidationErrors } from './utils.js';
+import { API_BASE_URL, limparErros, createUserRow, buildFormData, showLoadingMessage, showSuccessMessage, showErrorMessage, showValidationErrors, showDeleteConfirmationMessage } from './utils.js';
 
 export function indexPage(app){
     app.innerHTML = `
@@ -319,26 +319,27 @@ export function usersPage(app, users){
             const username = delBtn.dataset.username;
             if(!delBtn) return;
 
-            const confirmDelete = confirm("Deseja eliminar o utilizador com username: "+username+"?");
-            
-            if(confirmDelete){
-                const token = localStorage.getItem("token");
-                fetch(API_BASE_URL + "/users/" + username, {
-                    method: 'DELETE',
-                    headers: { "Authorization": "Bearer " + token },
-                })
-                .then((res) => res.json())
-                .then((data) => {
-                    if(data.success){
-                        showSuccessMessage(data.message, "/users");
-                    } else {
-                        showErrorMessage(data.message);
-                    }
-                })
-                .catch((err) => {
-                    showErrorMessage(err);
-                });
-            }
+            showDeleteConfirmationMessage("Deseja eliminar o utilizador com username: "+username+"?")
+            .then((confirmed)=> {
+                if(confirmed){
+                    const token = localStorage.getItem("token");
+                    fetch(API_BASE_URL + "/users/" + username, {
+                        method: 'DELETE',
+                        headers: { "Authorization": "Bearer " + token },
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if(data.success){
+                            showSuccessMessage(data.message, "/users");
+                        } else {
+                            showErrorMessage(data.message);
+                        }
+                    })
+                    .catch((err) => {
+                        showErrorMessage(err);
+                    });
+                }
+            });
         });
     }
 

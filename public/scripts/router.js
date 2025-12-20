@@ -42,7 +42,7 @@ export async function mostraPagina() {
             break;
         case '/profile':
             const profileFetch = await authorizationFetch("/users/profile");
-            if(profileFetch.status >= 200 || profileFetch.status <= 226){
+            if(profileFetch.status >= 200 && profileFetch.status <= 226){
                 const data = await profileFetch.json();
                 profilePage(app, data.user);
             } else {
@@ -51,7 +51,8 @@ export async function mostraPagina() {
             break;
         case '/users':
             const usersFetch = await authorizationFetch("/users");
-            if(usersFetch.status >= 200 || usersFetch.status <= 226){
+            console.log(usersFetch);
+            if(usersFetch.status >= 200 && usersFetch.status <= 226){
                 const data = await usersFetch.json();
                 usersPage(app, data.users);
             } else {

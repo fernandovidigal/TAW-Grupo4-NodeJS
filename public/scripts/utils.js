@@ -116,6 +116,22 @@ export function showValidationErrors(errors){
     });
 }
 
+export function showDeleteConfirmationMessage(message){
+    return Swal.fire({
+        icon: 'question',
+        title: message,
+        text: 'Esta ação não pode ser desfeita.',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'SIM',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#d33',
+        reverseButtons: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    }).then((result) => result.isConfirmed === true);
+}
+
 export function authorizationFetch(url) {
     const token = localStorage.getItem("token");
     const headers = new Headers({});
