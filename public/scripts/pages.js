@@ -87,6 +87,7 @@ export function loginPage(app){
             .then((data) => {
                 if(data.success){
                     localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
                     showSuccessMessage(data.message, "/profile");
                 } else {
                     showErrorMessage(data.message);
@@ -274,68 +275,64 @@ export function profilePage(app, user){
     app.appendChild(appContainer);
 }
 
-export function usersPage(app){
+export function usersPage(app, users){
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
 
-    appContainer.innerHTML = `
-        <h3>Lista de Utilizadores</h3>
-        <table class="users_list">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    `;
+    // Verifica se não existem utilizadores registados
+    if(users.length == 0){
+         appContainer.innerHTML = "<h2>Não existem utilizadores registados.</h2>";
+    } else {
+        // Existem utilizadores registados
+        appContainer.innerHTML = `
+            <h3>Lista de Utilizadores</h3>
+            <table class="users_list">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        `;
 
-    const users = [
-        {
-            id: 14111443,
-            nome: "Fernando3",
-            email: "efsgs3@asd.pt",
-            fotografia: "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"
-        },
-        {
-            id: 14111444,
-            nome: "Fernando4",
-            email: "efsgs4@asd.pt",
-            fotografia: "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"
-        },
-        {
-            id: 14111445,
-            nome: "Fernando5",
-            email: "efsgs5@asd.pt",
-            fotografia: "https://images.pexels.com/photos/360591/pexels-photo-360591.jpeg"
-        }
-    ];
+        const usersList = appContainer.querySelector('table.users_list tbody');
 
-    const usersList = appContainer.querySelector('table.users_list tbody');
+        users.forEach((user) => {
+            usersList.appendChild(createUserRow(user));
+        });
 
-    // Fazer o fetch dos utilizadores
+        const usersTable = appContainer.querySelector('table.users_list');
+        usersTable.addEventListener("click", function(e){
+            const delBtn = e.target.closest(".delete_button");
+            const username = delBtn.dataset.username;
+            if(!delBtn) return;
 
-    users.forEach((user) => {
-        usersList.appendChild(createUserRow(user));
-    });
-
-    const usersTable = appContainer.querySelector('table.users_list');
-    usersTable.addEventListener("click", function(e){
-        const delBtn = e.target.closest(".delete_button");
-        console.log(delBtn);
-        if(!delBtn) return;
-
-        const tRow = delBtn.closest("tr");
-        if(!tRow) return;
-
-        const confirmDelete = confirm("Deseja eliminar o utilizador?");
-        
-        // TODO: Pedido ao nodejs para eliminar
-        if(confirmDelete) tRow.remove();
-    });
+            const confirmDelete = confirm("Deseja eliminar o utilizador com username: "+username+"?");
+            
+            if(confirmDelete){
+                const token = localStorage.getItem("token");
+                fetch(API_BASE_URL + "/users/" + username, {
+                    method: 'DELETE',
+                    headers: { "Authorization": "Bearer " + token },
+                })
+                .then((res) => res.json())
+                .then((data) => {
+                    if(data.success){
+                        showSuccessMessage(data.message, "/users");
+                    } else {
+                        showErrorMessage(data.message);
+                    }
+                })
+                .catch((err) => {
+                    showErrorMessage(err);
+                });
+            }
+        });
+    }
 
     app.appendChild(appContainer);
 }

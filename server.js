@@ -14,7 +14,7 @@ const userRoutes = require('./routes/userRoutes');
 const checkAdmin = require("./utils/admin");
  
 const app = express(); // Cria uma instância da aplicação. Será utilizado para definir as rotas, configurações e middleware do servidor
-const PORT = process.env.PORT || 3030; // Define o número da porta de rede onde o servidor web irá estar à escuta de pedidos
+const PORT = process.env.PORT || 3000; // Define o número da porta de rede onde o servidor web irá estar à escuta de pedidos
 
 dotnev.config();
 

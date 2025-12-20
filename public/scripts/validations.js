@@ -10,13 +10,13 @@ const validarUsername = (username) => {
 
 const validarPassword = (password) => {
     // Tamanho mínimo
-    if (password.length < 6) return false;
+    if (password.length < 8) return false;
 
     return true;
 }
 
 const validaFotografia = () => {
-    const imageInput = document.getElementById("foto");
+    const imageInput = document.getElementById("fotografia");
 
     // Verificar se existe ficheiro
     if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
@@ -125,9 +125,9 @@ const validateFields = (inputs) => {
             case "password":
                 const isPasswordValid = validarPassword(input.value);
                 allFieldsValid = !allFieldsValid ? false : isPasswordValid;
-                if(!isPasswordValid) mostrarErro("Minímo de 6 caracteres", input);
+                if(!isPasswordValid) mostrarErro("Minímo de 8 caracteres", input);
                 break;
-            case "foto":
+            case "fotografia":
                 const isFotoValid = validaFotografia();
                 allFieldsValid = !allFieldsValid ? false : isFotoValid;
                 if(!isFotoValid) mostrarErro("Fotografia inválida", input);

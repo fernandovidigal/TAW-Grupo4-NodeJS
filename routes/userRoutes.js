@@ -5,10 +5,10 @@ const { verifyToken, isAdmin} = require('../middlewares/authMW'); // Importa mid
 
 router.get('/', [verifyToken, isAdmin], userController.getUsers); // Rota para listar todos os utilizadores
 
-router.get('/profile/:username', verifyToken, userController.getUserProfile); // Rota para o perfil de um utilizador
+router.get('/profile', verifyToken, userController.getUserProfile); // Rota para o perfil de um utilizador
 
-router.get('/admin/profile', [verifyToken, isAdmin], userController.getAdminProfile);// Rota para o perfil de administrador
+//router.get('/admin/profile', [verifyToken, isAdmin], userController.getAdminProfile);// Rota para o perfil de administrador
 
-router.delete('/profile/:username', [verifyToken, isAdmin], userController.apagarUtilizador); // Rota para apagar um utilizador
+router.delete('/:username', [verifyToken, isAdmin], userController.apagarUtilizador); // Rota para apagar um utilizador
 
 module.exports = router;

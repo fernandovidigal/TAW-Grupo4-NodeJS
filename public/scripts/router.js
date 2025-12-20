@@ -1,13 +1,6 @@
 import { indexPage, loginPage, registoPage, profilePage, usersPage } from './pages.js';
 import { authorizationFetch, buildNavigation } from './utils.js';
 
-const navLinks = [
-    {
-        text: "Home",
-        path: "/",
-    }
-]
-
 export function navigate(path, replace = false){
     if(replace){
         window.history.replaceState({}, '', path);
@@ -24,16 +17,16 @@ export async function mostraPagina() {
 
     app.innerHTML = '';
 
+    const token = localStorage.getItem('token');
+
+    // Construoi os menus de navegação
+    buildNavigation();
+
     switch(path){
         case '/':
-            navLinks.push({text: "Login", path: "/login" });
-            buildNavigation(navLinks);
             indexPage(app);
             break;
         case '/login':
-            navLinks.push({text: "Login", path: "/login" });
-            buildNavigation(navLinks);
-            const token = localStorage.getItem('token');
             if(token){
                 navigate("/profile", true);
                 break;
@@ -41,31 +34,29 @@ export async function mostraPagina() {
             loginPage(app);
             break;
         case '/register':
-            navLinks.push({text: "Login", path: "/login" });
-            buildNavigation(navLinks);
+            if(token){
+                navigate("/", true);
+                break;
+            }
             registoPage(app);
             break;
         case '/profile':
-            navLinks.push({text: "A minha conta", path: "/profile" });
-            const auth = await authorizationFetch("/users/profile");
-            if(auth.status === 400 || auth.status === 401 || auth.status === 403){
-                navigate("/login", true);
-                break;
-            } else {
-                const data = await auth.json();
-                if(data.user.isAdmin){
-                    navLinks.push({text: "Painel de Administração", path: "/users" });
-                }
-
-                buildNavigation(navLinks);
+            const profileFetch = await authorizationFetch("/users/profile");
+            if(profileFetch.status >= 200 || profileFetch.status <= 226){
+                const data = await profileFetch.json();
                 profilePage(app, data.user);
-                break;
+            } else {
+                navigate("/login", true);
             }
+            break;
         case '/users':
-            navLinks.push({text: "A minha conta", path: "/profile" });
-            navLinks.push({text: "Painel de Administração", path: "/users" });
-            buildNavigation(navLinks);
-            usersPage(app);
+            const usersFetch = await authorizationFetch("/users");
+            if(usersFetch.status >= 200 || usersFetch.status <= 226){
+                const data = await usersFetch.json();
+                usersPage(app, data.users);
+            } else {
+                navigate("/", true);
+            }
             break;
         default:
             //mostraPaginaNaoEncontrada();

@@ -4,7 +4,7 @@ services:
     container_name: express-app
     # Mapeia a porta 3000 do container para a porta 3000 da sua máquina
     ports:
-      - "3030:3030"
+      - "3000:3000"
     volumes:
       # Monta o código local para que as alterações se reflitam no container (Live Reload)
       - .:/usr/src/app
@@ -17,7 +17,7 @@ services:
       # Variável que o Express vai ler para se ligar à base de dados
       # O host deve ser 'mongodb' (ou seja, o nome do serviço)
       MONGO_URI: mongodb://mongodb:27017/projeto-db 
-      PORT: 3030
+      PORT: 3000
 
   mongodb:
     image: mongo:latest

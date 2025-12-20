@@ -1,6 +1,6 @@
 import { navigate } from './router.js';
 
-export const API_BASE_URL = 'http://localhost:3030/api';
+export const API_BASE_URL = 'http://localhost:3000/api';
 
 /*export function cleanHTML() {
     if(formContainer){
@@ -41,6 +41,7 @@ export function createUserRow(user){
     const deleteBtn = document.createElement("BUTTON");
     deleteBtn.classList.add("button", "logout_button", "delete_button");
     deleteBtn.setAttribute("type", "button");
+    deleteBtn.dataset.username = user.username;
     deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M232.7 69.9L224 96L128 96C110.3 96 96 110.3 96 128C96 145.7 110.3 160 128 160L512 160C529.7 160 544 145.7 544 128C544 110.3 529.7 96 512 96L416 96L407.3 69.9C402.9 56.8 390.7 48 376.9 48L263.1 48C249.3 48 237.1 56.8 232.7 69.9zM512 208L128 208L149.1 531.1C150.7 556.4 171.7 576 197 576L443 576C468.3 576 489.3 556.4 490.9 531.1L512 208z"/></svg>`;
     deleteTD.appendChild(deleteBtn);
 
@@ -82,9 +83,10 @@ export function showSuccessMessage(message, path, pathReplace = false){
         title: 'Sucesso',
         text: message,
         icon: 'success',
+        showConfirmButton: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
-        timer: 2000,
+        timer: 1500,
         timerProgressBar: true,
     }).then(() => {
         navigate(path, pathReplace);
@@ -107,13 +109,29 @@ export function authorizationFetch(url) {
     return fetch(API_BASE_URL + url, { headers });
 }
 
-export function buildNavigation(navList){
+export function buildNavigation(){
+    // Limpa os menus de navegação para serem posteriormente construídos
     const nav = document.querySelector(".navigation");
     nav.innerHTML = '';
 
+    const navLinks = [
+        { text: "Home", path: "/" }
+    ]
+
+    const token = localStorage.getItem("token");
+    const { isAdmin } = JSON.parse(localStorage.getItem("user")) || { isAdmin: false };
+    if(token){
+        navLinks.push({text: "A minha conta", path: "/profile"});
+        if(isAdmin){
+            navLinks.push({text: "Painel de Administração", path: "/users"});
+        }
+    } else {
+        navLinks.push({text: "Login", path: "/login"});
+    }
+
     const navUL = document.createElement("UL");
 
-    navList.forEach((link) => {
+    navLinks.forEach((link) => {
         const navLI = document.createElement("LI");
         const navA = document.createElement("A");
         navA.setAttribute("href", link.path);
