@@ -1,5 +1,5 @@
 const User = require('../models/User'); // Importa o modelo Mongoose
-const { param, validationResult } = require('express-validator'); // Importa biblioteca para sanitização e validação de inputs
+const { validationResult } = require('express-validator'); // Importa biblioteca para sanitização e validação de inputs
 
 // Controlador para listar todos os utilizadores (apenas para administradores)
 exports.getUsers = async (req, res) => {

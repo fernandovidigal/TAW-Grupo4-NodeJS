@@ -1,5 +1,5 @@
 import { navigate } from './router.js';
-import { API_BASE_URL, limparErros, createUserRow, buildFormData, showLoadingMessage, showSuccessMessage, showErrorMessage } from './utils.js';
+import { API_BASE_URL, limparErros, createUserRow, buildFormData, showLoadingMessage, showSuccessMessage, showErrorMessage, showValidationErrors } from './utils.js';
 
 export function indexPage(app){
     app.innerHTML = `
@@ -90,7 +90,11 @@ export function loginPage(app){
                     localStorage.setItem("user", JSON.stringify(data.user));
                     showSuccessMessage(data.message, "/profile");
                 } else {
-                    showErrorMessage(data.message);
+                    if(data.errors){
+                        showValidationErrors(data.errors);
+                    } else {
+                        showErrorMessage(data.message);
+                    } 
                 }
             })
             .catch((err) => {
@@ -174,7 +178,11 @@ export function registoPage(app){
                 if(data.success){
                     showSuccessMessage(data.message, "/login");
                 } else {
-                    showErrorMessage(data.message);
+                    if(data.errors){
+                        showValidationErrors(data.errors);
+                    } else {
+                        showErrorMessage(data.message);
+                    } 
                 }
             })
             .catch((err) => {
@@ -333,6 +341,15 @@ export function usersPage(app, users){
             }
         });
     }
+
+    app.appendChild(appContainer);
+}
+
+export function paginaNaoEncontrada(app){
+    const appContainer = document.createElement("DIV");
+    appContainer.classList.add("app_container");
+
+    appContainer.innerHTML = "<h2>Página não encontrada.</h2>";
 
     app.appendChild(appContainer);
 }

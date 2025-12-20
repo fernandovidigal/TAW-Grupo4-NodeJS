@@ -93,10 +93,10 @@ const validateLoginFields = (inputs) => {
 
     inputs.forEach((input) => {
         switch(input.name){
-            case "username":
-                const isUsernameValid = validarUsername(input.value);
-                allFieldsValid = !allFieldsValid ? false : isUsernameValid;
-                if(!isUsernameValid) mostrarErro("Username inválido", input);
+            case "identifier":
+                const isIdentifierValid = validarUsername(input.value);
+                allFieldsValid = !allFieldsValid ? false : isIdentifierValid;
+                if(!isIdentifierValid) mostrarErro("Username inválido", input);
                 break;
             case "password":
                 const isNotEmptyPassword = input.value.length > 0 ? true : false;

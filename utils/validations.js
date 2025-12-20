@@ -12,7 +12,7 @@ exports.validateRegisterFields = [
         .withMessage('Nome obrigatório'),
     body('telemovel').isMobilePhone('pt-PT')
         .withMessage('Número de telemóvel inválido'),
-    body('nif').isLength({ min: 9, max: 9 }).isNumeric()
+    body('nif').trim().isNumeric().withMessage("NIF só deve conter números").isLength({ min: 9, max: 9 })
         .withMessage('NIF deve conter 9 dígitos numéricos'),
     body('morada').notEmpty().trim().escape()
         .withMessage('Morada obrigatória'),

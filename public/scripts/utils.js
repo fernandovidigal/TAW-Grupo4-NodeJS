@@ -102,6 +102,20 @@ export function showErrorMessage(message) {
     });
 }
 
+export function showValidationErrors(errors){
+    let message = '';
+    errors.forEach((error) => {
+        message += '<p>'+error.msg+'</p>';
+    });
+
+    Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        html: message,
+        showConfirmButton: true,
+    });
+}
+
 export function authorizationFetch(url) {
     const token = localStorage.getItem("token");
     const headers = new Headers({});

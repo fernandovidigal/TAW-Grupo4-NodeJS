@@ -1,4 +1,4 @@
-import { indexPage, loginPage, registoPage, profilePage, usersPage } from './pages.js';
+import { indexPage, loginPage, registoPage, profilePage, usersPage, paginaNaoEncontrada } from './pages.js';
 import { authorizationFetch, buildNavigation } from './utils.js';
 
 export function navigate(path, replace = false){
@@ -59,7 +59,7 @@ export async function mostraPagina() {
             }
             break;
         default:
-            //mostraPaginaNaoEncontrada();
+            paginaNaoEncontrada(app);
             break;
     }
 }
