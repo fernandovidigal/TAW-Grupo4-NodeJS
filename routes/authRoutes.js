@@ -1,7 +1,7 @@
 const express = require('express'); 
 const router = express.Router();     // Cria uma nova instância de um objeto Router para agrupar rotas de forma lógica
 const authController = require('../controllers/authController');   // Importa o authController que irá conter a lógica para o login, register, logout, etc.
-const {validateLoginFields, validateRegisterFields} = require('../utils/validations');
+const {validateLoginFields, validateRegisterFields} = require('../middlewares/validations');
 const multer = require("multer");
 
 const upload = multer({

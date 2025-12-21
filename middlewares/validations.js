@@ -30,7 +30,7 @@ exports.validateLoginFields = [
 // Validação e sanitização do parâmetro 'username'
 exports.validateUsernameField = [
     param('username')
-        .isLength({ min: 3, max: 15 }).trim().escape()
+        .isLength({ min: 3 }).trim().escape()
         .withMessage('Username inválido'),
 ];
 

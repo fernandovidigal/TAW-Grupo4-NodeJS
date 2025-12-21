@@ -19,7 +19,7 @@ export async function mostraPagina() {
 
     const token = localStorage.getItem('token');
 
-    // Construoi os menus de navegação
+    // Constroi os menus de navegação
     buildNavigation();
 
     switch(path){
@@ -42,7 +42,7 @@ export async function mostraPagina() {
             break;
         case '/profile':
             const profileFetch = await authorizationFetch("/users/profile");
-            if(profileFetch.status >= 200 && profileFetch.status <= 226){
+            if(profileFetch.status >= 200 && profileFetch.status <= 226){ // O pedido é bem succedido
                 const data = await profileFetch.json();
                 profilePage(app, data.user);
             } else {

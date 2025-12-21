@@ -8,6 +8,7 @@ const dotnev = require('dotenv'); // Permite o uso de variáveis ambiente
 const path = require('path');
 const rateLimit = require('express-rate-limit');  // Limita a taxa de pedidos
 
+// Definição dos limites de pedidos
 const limiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 minutes
 	limit: 100, // Limita a 100 pedidos por período (aqui, por 10 minutes)
@@ -16,12 +17,14 @@ const limiter = rateLimit({
   message: "Demasiados pedidos. Por favor tente mais tarde."
 });
 
+// Inicialização das variáveis ambiente
 dotnev.config();
 
 // Importar as rotas
 const authRoutes = require('./routes/authRoutes'); 
 const userRoutes = require('./routes/userRoutes');
 
+// Utilitário para criar conta de admin caso esta não exista
 const checkAdmin = require("./utils/admin");
  
 const app = express(); // Cria uma instância da aplicação. Será utilizado para definir as rotas, configurações e middleware do servidor
@@ -34,7 +37,7 @@ app.use(limiter); // Limitador de pedidos
 
 app.use(express.json()); // Configura o Express para processar pedidos que chegam ao servidor com o header Content-Type: application/json.
 
-app.use(cors());                   // Para simplificar, vamos permitir todas as origens
+app.use(cors());   // Para simplificar, vamos permitir todas as origens
 app.use(morgan('tiny'));   // Existem outros presets que podem usar: dev, combined, common, ou short
 app.use(helmet({
     contentSecurityPolicy: {
@@ -47,7 +50,7 @@ app.use(helmet({
 
 // Rotas
 app.use('/api/auth', authRoutes); // Usar as rotas da API sob o prefixo /api/auth
-app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes); // Usar as rotas da API sob o prefixo /api/users
 
 // Serve o ficheiro da página SPA
 app.use((req, res) => {
@@ -71,9 +74,3 @@ mongoose.connect(DB_URI) // Inicia a tentativa de conexão assíncrona à base d
     .catch(err => { // Esta função é executada apenas se a ligação ao MongoDB falhar
         console.error('ERRO: Falha na ligação ao MongoDB:', err.message);
     });
-
-// Rota de teste simples
-app.get('/', (req, res) => { // Ficará à escuta de pedidos HTTP que usam o método GET no caminho / (ou seja, a raiz ou root da aplicação).
-    // Define a função callback que é executada sempre que um pedido corresponde à rota /. 
-    res.send('A API de Utilizadores está ON!'); // Envia a resposta ao cliente
-});
