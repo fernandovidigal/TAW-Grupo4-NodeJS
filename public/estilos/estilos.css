@@ -147,6 +147,10 @@ table td img {
     margin: 2em auto;
 }
 
+.app_container_wider {
+    max-width: 800px;
+}
+
 .app_container h3 {
     margin-bottom: 1.5em;
     text-align: left;

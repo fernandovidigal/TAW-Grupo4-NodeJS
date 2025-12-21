@@ -32,6 +32,9 @@ export function createUserRow(user){
     const userEmailTD = document.createElement("TD");
     userEmailTD.textContent = user.email;
 
+    const userTelemovelTD = document.createElement("TD");
+    userTelemovelTD.textContent = user.telemovel;
+
     const deleteTD = document.createElement("TD");
     const deleteBtn = document.createElement("BUTTON");
     deleteBtn.classList.add("button", "logout_button", "delete_button");
@@ -43,6 +46,7 @@ export function createUserRow(user){
     tRow.appendChild(imgTD);
     tRow.appendChild(userNameTD);
     tRow.appendChild(userEmailTD);
+    tRow.appendChild(userTelemovelTD);
     tRow.appendChild(deleteTD);
 
     return tRow;
@@ -169,4 +173,13 @@ export function buildNavigation(){
     });
 
     nav.appendChild(navUL);
+}
+
+// Verifica se o token for marcado como inválido (espirado ou adulterado)
+export async function checkInvalidToken(response){
+    const data = await response.json();
+    if(data.invalidToken){
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+    }
 }

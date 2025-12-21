@@ -301,7 +301,7 @@ export function profilePage(app, user){
 
 export function usersPage(app, users){
     const appContainer = document.createElement("DIV");
-    appContainer.classList.add("app_container");
+    appContainer.classList.add("app_container", "app_container_wider");
 
     // Verifica se não existem utilizadores registados
     if(users.length == 0){
@@ -316,6 +316,7 @@ export function usersPage(app, users){
                         <th></th>
                         <th>Nome</th>
                         <th>Email</th>
+                        <th>Telemovel</th>
                         <th></th>
                     </tr>
                 </thead>

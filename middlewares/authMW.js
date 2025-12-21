@@ -28,6 +28,7 @@ exports.verifyToken = (req, res, next) => {
         // Token inválido, expirado ou adulterado
         return res.status(401).json({
             success: false,
+            invalidToken: true,
             message: 'Token inválido ou expirado.',
             error: error.message
         });

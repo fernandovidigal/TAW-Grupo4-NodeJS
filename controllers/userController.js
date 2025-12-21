@@ -27,7 +27,7 @@ exports.getUserProfile = async (req, res) => {
         // Req.user existe porque foi adicionado ao req pelo middleware de validação do token
         const username = req.user.username;
 
-        // Pesquisa o utilizador pelo username sem mostrar a password
+        // Pesquisa o utilizador pelo username
         const user = await User.findOne({ username });
 
         if(!user){
@@ -114,32 +114,27 @@ exports.editarPerfil = async (req, res) => {
 
         const { username, nome, telemovel, nif, morada } = req.body;
 
-        // Verifica se o utilizador que está a editar é o admin
-        if(req.user.isAdmin){
+        // Verifica se o username que consta no JWT token corresponde ao username que está a ser editado
+        if(username === req.user.username){
+            await User.updateOne(
+                {username: username},
+                {$set: {
+                    nome,
+                    telemovel,
+                    nif,
+                    morada
+                }}
+            );
 
-        } else { // Não é o admin a editar
-            // Verifica se o username que consta no JWT token corresponde ao username que está a ser editado
-            if(username === req.user.username){
-                await User.updateOne(
-                    {username: username},
-                    {$set: {
-                        nome,
-                        telemovel,
-                        nif,
-                        morada
-                    }}
-                );
-
-                res.status(200).json({
-                    success: true,
-                    message: "Utilizador atualizado.",
-                });
-            } else {
-                return res.status(403).json({
-                    success: false,
-                    message: 'Não é permitido editar outro utilizador.'
-                });
-            }
+            res.status(200).json({
+                success: true,
+                message: "Utilizador atualizado.",
+            });
+        } else {
+            return res.status(403).json({
+                success: false,
+                message: 'Não é permitido editar outro utilizador.'
+            });
         }
 
     } catch(error) {

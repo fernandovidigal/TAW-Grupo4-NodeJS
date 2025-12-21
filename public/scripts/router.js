@@ -1,5 +1,5 @@
 import { indexPage, loginPage, registoPage, profilePage, usersPage, paginaNaoEncontrada, editProfilePage } from './pages.js';
-import { authorizationFetch, buildNavigation } from './utils.js';
+import { authorizationFetch, buildNavigation, checkInvalidToken } from './utils.js';
 
 export function navigate(path, replace = false){
     if(replace){
@@ -46,6 +46,7 @@ export async function mostraPagina() {
                 const data = await profileFetch.json();
                 profilePage(app, data.user);
             } else {
+                checkInvalidToken(profileFetch); // Verifica se o token expirou ou é inválido
                 navigate("/login", true);
             }
             break;
@@ -55,6 +56,7 @@ export async function mostraPagina() {
                 const data = await usersFetch.json();
                 usersPage(app, data.users);
             } else {
+                checkInvalidToken(usersFetch); // Verifica se o token expirou ou é inválido
                 navigate("/", true);
             }
             break;
@@ -64,6 +66,7 @@ export async function mostraPagina() {
                 const data = await peditProfileFetch.json();
                 editProfilePage(app, data.user);
             } else {
+                checkInvalidToken(peditProfileFetch); // Verifica se o token expirou ou é inválido
                 navigate("/", true);
             }
             break;

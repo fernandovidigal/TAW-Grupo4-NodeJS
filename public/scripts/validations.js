@@ -35,7 +35,7 @@ const validaFotografia = () => {
 
 const validarNome = (nome) => {
     // Só contém letras, números, _ ou -
-    if (!/^[a-zA-Z_\- ]+$/.test(nome)) return false;
+    if (!/^[a-zA-Z_\-. ]+$/.test(nome)) return false;
 
     // Tamanho mínimo
     if (nome.length < 3) return false;
