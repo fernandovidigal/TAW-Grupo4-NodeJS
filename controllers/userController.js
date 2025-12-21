@@ -99,3 +99,55 @@ exports.apagarUtilizador = async (req, res) => {
         });
     }
 };
+
+exports.editarPerfil = async (req, res) => {
+    try {
+        // Verifica erros de validação
+        const errors = validationResult(req);
+        console.log(errors);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Dados inválidos',
+                errors: errors.array()
+            });
+        }
+
+        const { username, nome, telemovel, nif, morada } = req.body;
+
+        // Verifica se o utilizador que está a editar é o admin
+        if(req.user.isAdmin){
+
+        } else { // Não é o admin a editar
+            // Verifica se o username que consta no JWT token corresponde ao username que está a ser editado
+            if(username === req.user.username){
+                await User.updateOne(
+                    {username: username},
+                    {$set: {
+                        nome,
+                        telemovel,
+                        nif,
+                        morada
+                    }}
+                );
+
+                res.status(200).json({
+                    success: true,
+                    message: "Utilizador atualizado.",
+                });
+            } else {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Não é permitido editar outro utilizador.'
+                });
+            }
+        }
+
+    } catch(error) {
+        console.error("Erro ao editar:", error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro interno do servidor.'
+        });
+    }
+}

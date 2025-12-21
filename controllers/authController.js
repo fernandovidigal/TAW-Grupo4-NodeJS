@@ -1,7 +1,7 @@
 const User = require('../models/User'); // Modelo Mongoose para utilizadores
 const jwt = require('jsonwebtoken');     // Biblioteca para trabalhar com JSON Web Tokens (tokens de autenticação)
 const bcrypt = require("bcrypt"); // Para encriptar a password
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2; // Cloudinary CDN
 const dotenv = require("dotenv");
 const { validationResult } = require('express-validator'); // Para sanitização e validação de inputs
 

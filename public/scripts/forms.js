@@ -1,18 +1,18 @@
-const createHeader = (header) => {
+export function createHeader(header){
     const headerElement = document.createElement("H3");
     headerElement.textContent = header;
 
     return headerElement;
 }
 
-const createFormWrapper = (nome) => {
+export function createForm(nome){
     const formWrapper = document.createElement("FORM");
     formWrapper.setAttribute("name", nome);
 
     return formWrapper;
 }
 
-const createLabelElement = (nome, label) => {
+export function createLabelElement(nome, label){
     const formLabel = document.createElement("LABEL");
     formLabel.setAttribute("for", nome);
     formLabel.textContent = label;
@@ -20,7 +20,7 @@ const createLabelElement = (nome, label) => {
     return formLabel;
 }
 
-const createErrorElement = (message = "") => {
+export function createErrorElement(message = ""){
     const errorElement = document.createElement("SMALL");
     errorElement.textContent = message;
     errorElement.classList.add("valid-error", "hidden");
@@ -28,14 +28,14 @@ const createErrorElement = (message = "") => {
     return errorElement;
 }
 
-const createFormControlElement = () => {
+export function createFormControlElement(){
     const formControl = document.createElement("DIV");
     formControl.classList.add("form_control");
 
     return formControl;
 }
 
-const createTextFormElement = (nome, label, tipo = "text") => {
+export function createTextFormElement(nome, label, tipo = "text"){
     const textInputElement = createFormControlElement();
 
     const textInputLabel = createLabelElement(nome, label);
@@ -53,7 +53,7 @@ const createTextFormElement = (nome, label, tipo = "text") => {
     return textInputElement;
 }
 
-const createFileUploadElement = (nome, label) => {
+export function createFileUploadElement(nome, label){
     const fileUploadElement = createFormControlElement();
 
     const fileUploadLabel = createLabelElement(nome, label);
@@ -71,7 +71,7 @@ const createFileUploadElement = (nome, label) => {
     return fileUploadElement;
 }
 
-const createNumberFormElement = (nome, label, max = 0) => {
+export function createNumberFormElement(nome, label, max = 0){
     const numberInputElement = createFormControlElement();
 
     const numberInputLabel = createLabelElement(nome, label);
@@ -81,6 +81,7 @@ const createNumberFormElement = (nome, label, max = 0) => {
     numberInput.setAttribute("type", "number");
     numberInput.setAttribute("name", nome);
     numberInput.setAttribute("id", nome);
+    // Se foi indicado um número máximo de caracteres, apenas essa quantidade de digitos é permitida
     if(max && max > 0){
         numberInput.addEventListener("input", function(e){
             if (this.value.length > max) {
@@ -96,7 +97,7 @@ const createNumberFormElement = (nome, label, max = 0) => {
     return numberInputElement;
 }
 
-const createTableRow = (label, value) => {
+export function createTableRow(label, value){
     const tableTR = document.createElement("TR");
 
     const tableLabelTD = document.createElement("TD");
@@ -110,7 +111,7 @@ const createTableRow = (label, value) => {
     return tableTR;
 }
 
-const createButton = (nome, className, textContent, tipo = "button") => {
+export function createButton(nome, className, textContent, tipo = "button"){
     const button = document.createElement("BUTTON");
     button.setAttribute("type", tipo);
     button.setAttribute("name", nome);

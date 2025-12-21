@@ -203,6 +203,7 @@ button {
 
 button svg {
     fill: #fff;
+    height: 1em;
 }
 
 .entrar_button {

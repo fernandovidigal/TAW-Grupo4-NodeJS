@@ -2,12 +2,6 @@ import { navigate } from './router.js';
 
 export const API_BASE_URL = 'http://localhost:3000/api';
 
-/*export function cleanHTML() {
-    if(formContainer){
-        formContainer.innerHTML = "";
-    }
-}*/
-
 // Limpa os erros de validação
 export function limparErros(inputs){
     inputs.forEach((input) => {
@@ -22,6 +16,7 @@ export function limparErros(inputs){
     });
 }
 
+// Cria uma linha na tabela de utilizadores da página users (Admin only)
 export function createUserRow(user){
     const tRow = document.createElement("TR");
 
@@ -53,6 +48,7 @@ export function createUserRow(user){
     return tRow;
 }
 
+// coloca os dados do formulário pronto para enviar para o servidor
 export function buildFormData(inputs){
     const formData = new FormData();
     inputs.forEach((input) => {

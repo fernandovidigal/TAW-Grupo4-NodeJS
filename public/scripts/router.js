@@ -1,4 +1,4 @@
-import { indexPage, loginPage, registoPage, profilePage, usersPage, paginaNaoEncontrada } from './pages.js';
+import { indexPage, loginPage, registoPage, profilePage, usersPage, paginaNaoEncontrada, editProfilePage } from './pages.js';
 import { authorizationFetch, buildNavigation } from './utils.js';
 
 export function navigate(path, replace = false){
@@ -51,10 +51,18 @@ export async function mostraPagina() {
             break;
         case '/users':
             const usersFetch = await authorizationFetch("/users");
-            console.log(usersFetch);
             if(usersFetch.status >= 200 && usersFetch.status <= 226){
                 const data = await usersFetch.json();
                 usersPage(app, data.users);
+            } else {
+                navigate("/", true);
+            }
+            break;
+        case '/editProfile':
+            const peditProfileFetch = await authorizationFetch("/users/profile");
+            if(peditProfileFetch.status >= 200 && peditProfileFetch.status <= 226){
+                const data = await peditProfileFetch.json();
+                editProfilePage(app, data.user);
             } else {
                 navigate("/", true);
             }

@@ -88,15 +88,16 @@ const mostrarErro = (mensagem, input) => {
 // allFieldsValid mantem o estado da validação, ou seja, a partir do momento
 // que um campo tem erros esta variável fica com o valor falso e mantêm-se assim até ao final
 // porque pelo menos um campo tem erro
-const validateLoginFields = (inputs) => {
-    allFieldsValid = true;
+export function validateLoginFields(inputs){
+    let allFieldsValid = true;
 
     inputs.forEach((input) => {
         switch(input.name){
             case "identifier":
-                const isIdentifierValid = validarUsername(input.value);
-                allFieldsValid = !allFieldsValid ? false : isIdentifierValid;
-                if(!isIdentifierValid) mostrarErro("Username inválido", input);
+                const isUsernameValid = validarUsername(input.value);
+                const isEmailValid = validarEmail(input.value);
+                allFieldsValid = !allFieldsValid ? false : (isUsernameValid || isEmailValid);
+                if(!isUsernameValid && !isEmailValid) mostrarErro("Username ou Email inválido", input);
                 break;
             case "password":
                 const isNotEmptyPassword = input.value.length > 0 ? true : false;
@@ -112,8 +113,8 @@ const validateLoginFields = (inputs) => {
 }
 
 // Mesma explicação que a função anterior, mas neste caso para os campos de registo
-const validateFields = (inputs) => {
-    allFieldsValid = true;
+export function validateFields(inputs) {
+    let allFieldsValid = true;
 
     inputs.forEach((input) => {
         switch(input.name){

@@ -1,5 +1,7 @@
 import { navigate } from './router.js';
 import { API_BASE_URL, limparErros, createUserRow, buildFormData, showLoadingMessage, showSuccessMessage, showErrorMessage, showValidationErrors, showDeleteConfirmationMessage } from './utils.js';
+import { createHeader, createForm, createTextFormElement, createFileUploadElement, createNumberFormElement, createTableRow, createButton } from './forms.js';
+import { validateLoginFields, validateFields} from './validations.js'
 
 export function indexPage(app){
     app.innerHTML = `
@@ -51,9 +53,9 @@ export function loginPage(app){
     const formHeader = createHeader("Login");
     appContainer.appendChild(formHeader);
 
-    const formWrapper = createFormWrapper("login");
+    const formWrapper = createForm("login");
 
-    const usernameInput = createTextFormElement("identifier", "Username:");
+    const usernameInput = createTextFormElement("identifier", "Username or Email:");
     formWrapper.appendChild(usernameInput);
 
     const passwordInput = createTextFormElement("password", "Password:", "password");
@@ -124,7 +126,7 @@ export function registoPage(app){
     const header = createHeader("Registo de Novo Utilizador");
     appContainer.appendChild(header);
 
-    const formWrapper = createFormWrapper("registo");
+    const formWrapper = createForm("registo");
     formWrapper.setAttribute("enctype", "multipart/form-data");
 
     const usernameInput = createTextFormElement("username", "Username:");
@@ -265,6 +267,19 @@ export function profilePage(app, user){
 
     appContainer.appendChild(profileContent);
 
+    const editProfileButton = document.createElement("BUTTON");
+    editProfileButton.classList.add("button");
+    editProfileButton.setAttribute("name", "logout");
+    editProfileButton.setAttribute("type", "button");
+    editProfileButton.textContent = "Editar Perfil";
+
+    editProfileButton.addEventListener("click", function(e){
+        e.preventDefault();
+        navigate('/editProfile');
+    });
+
+    appContainer.appendChild(editProfileButton);
+
     // Botão Logout
     const logoutButton = document.createElement('BUTTON');
     logoutButton.classList.add("button", "logout_button");
@@ -275,6 +290,7 @@ export function profilePage(app, user){
     logoutButton.addEventListener("click", function(e){
         e.preventDefault();
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
         navigate('/', true);
     });
 
@@ -351,6 +367,101 @@ export function paginaNaoEncontrada(app){
     appContainer.classList.add("app_container");
 
     appContainer.innerHTML = "<h2>Página não encontrada.</h2>";
+
+    app.appendChild(appContainer);
+}
+
+export function editProfilePage(app, user){
+    console.log(user);
+    console.log(user.nome);
+    const appContainer = document.createElement("DIV");
+    appContainer.classList.add("app_container");
+
+    const header = createHeader("Editar Utilizador");
+    appContainer.appendChild(header);
+
+    const form = createForm("editar");
+
+    const nomeInput = createTextFormElement("nome", "Nome:");
+    nomeInput.querySelector("input").value = user.nome;
+    form.appendChild(nomeInput);
+
+    const telemovelInput = createNumberFormElement("telemovel", "Telemóvel:", 9);
+    telemovelInput.querySelector("input").value = user.telemovel;
+    form.appendChild(telemovelInput);
+
+    const nifInput = createNumberFormElement("nif", "NIF (9 digitos):", 9);
+    nifInput.querySelector("input").value = user.nif;
+    form.appendChild(nifInput);
+
+    const moradaInput = createTextFormElement("morada", "Morada:");
+    moradaInput.querySelector("input").value = user.morada;
+    form.appendChild(moradaInput);
+
+    const editarBtn = createButton("editar", "editar", "Editar", "submit");
+    form.appendChild(editarBtn);
+
+    editarBtn.addEventListener("click", function(e){
+        e.preventDefault();
+            
+        const formElements = document.getElementsByName("editar")[0];
+        const allInputs = formElements.querySelectorAll("input");
+            
+        limparErros(allInputs);
+
+        const isValid = validateFields(allInputs);
+        console.log(isValid);
+
+        if(isValid){
+            const formData = buildFormData(allInputs);
+
+            showLoadingMessage("A atualizar...");
+
+            const token = localStorage.getItem("token");
+
+            console.log([...formData]);
+
+            fetch(API_BASE_URL + "/users/editProfile", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify({
+                    username: user.username,
+                    nome: formData.get('nome'),
+                    telemovel: formData.get('telemovel'),
+                    nif: formData.get('nif'),
+                    morada: formData.get('morada'),
+                }),
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if(data.success){
+                    showSuccessMessage(data.message, "/login");
+                } else {
+                    if(data.errors){
+                        showValidationErrors(data.errors);
+                    } else {
+                        showErrorMessage(data.message);
+                    } 
+                }
+            })
+            .catch((err) => {
+                showErrorMessage(err);
+            });
+        }
+    });
+
+    const cancelButton = createButton("cancelar", "cancelar", "Cancelar");
+    form.appendChild(cancelButton);
+
+    cancelButton.addEventListener("click", function(e){
+        e.preventDefault();
+        navigate('/profile');
+    });
+
+    appContainer.appendChild(form);
 
     app.appendChild(appContainer);
 }
