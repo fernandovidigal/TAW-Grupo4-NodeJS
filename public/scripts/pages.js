@@ -372,8 +372,6 @@ export function paginaNaoEncontrada(app){
 }
 
 export function editProfilePage(app, user){
-    console.log(user);
-    console.log(user.nome);
     const appContainer = document.createElement("DIV");
     appContainer.classList.add("app_container");
 
@@ -410,7 +408,6 @@ export function editProfilePage(app, user){
         limparErros(allInputs);
 
         const isValid = validateFields(allInputs);
-        console.log(isValid);
 
         if(isValid){
             const formData = buildFormData(allInputs);
@@ -418,8 +415,6 @@ export function editProfilePage(app, user){
             showLoadingMessage("A atualizar...");
 
             const token = localStorage.getItem("token");
-
-            console.log([...formData]);
 
             fetch(API_BASE_URL + "/users/editProfile", {
                 method: 'PUT',
