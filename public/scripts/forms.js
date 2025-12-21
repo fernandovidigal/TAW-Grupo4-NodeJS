@@ -81,7 +81,7 @@ export function createNumberFormElement(nome, label, max = 0){
     numberInput.setAttribute("type", "number");
     numberInput.setAttribute("name", nome);
     numberInput.setAttribute("id", nome);
-    // Se foi indicado um número máximo de caracteres, apenas essa quantidade de digitos é permitida
+    // Se foi indicado um número máximo de caracteres na variável max, apenas essa quantidade de digitos é permitida
     if(max && max > 0){
         numberInput.addEventListener("input", function(e){
             if (this.value.length > max) {

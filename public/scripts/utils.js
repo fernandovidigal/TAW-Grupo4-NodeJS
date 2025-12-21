@@ -66,6 +66,7 @@ export function buildFormData(inputs){
     return formData;
 }
 
+// Mostra popup de loading
 export function showLoadingMessage(texto) {
     Swal.fire({
         title: texto,
@@ -78,6 +79,7 @@ export function showLoadingMessage(texto) {
     });
 }
 
+// Mostra popup de sucesso
 export function showSuccessMessage(message, path, pathReplace = false){
     Swal.fire({
         title: 'Sucesso',
@@ -93,6 +95,7 @@ export function showSuccessMessage(message, path, pathReplace = false){
     });
 } 
 
+// Mostra popup de erro
 export function showErrorMessage(message) {
     Swal.fire({
         title: 'Erro',
@@ -102,6 +105,7 @@ export function showErrorMessage(message) {
     });
 }
 
+// Mostra popup com os erros de validação que vêm do lado do servidor
 export function showValidationErrors(errors){
     let message = '';
     errors.forEach((error) => {
@@ -116,6 +120,7 @@ export function showValidationErrors(errors){
     });
 }
 
+// Mostra popup para confirmação de eliminação
 export function showDeleteConfirmationMessage(message){
     return Swal.fire({
         icon: 'question',
@@ -132,6 +137,7 @@ export function showDeleteConfirmationMessage(message){
     }).then((result) => result.isConfirmed === true);
 }
 
+// Faz pedido com cabeçalho de autorização
 export function authorizationFetch(url) {
     const token = localStorage.getItem("token");
     const headers = new Headers({});
@@ -139,6 +145,8 @@ export function authorizationFetch(url) {
     return fetch(API_BASE_URL + url, { headers });
 }
 
+// Constroi os menus de navegação
+// Os menus vão depender do estado da aplicação (se o utilizador já fez login, se é administrador)
 export function buildNavigation(){
     // Limpa os menus de navegação para serem posteriormente construídos
     const nav = document.querySelector(".navigation");

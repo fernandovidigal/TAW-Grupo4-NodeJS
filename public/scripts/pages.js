@@ -67,14 +67,18 @@ export function loginPage(app){
     entrarBtn.addEventListener("click", function(e){
         e.preventDefault();
 
+        // Obtem o formulário de login
         const formElements = document.getElementsByName("login")[0];
+        // Obtem todos os inputs do formulario de login
         const allInputs = formElements.querySelectorAll("input");
 
         limparErros(allInputs);
 
+        // Valida os campos do formulário de login
         const isValid = validateLoginFields(allInputs);
 
         if(isValid){
+            // Constroi um conjunto key:value que representa os campos do formulário
             const formData = buildFormData(allInputs);
 
             fetch(API_BASE_URL + "/auth/login", {
@@ -236,11 +240,11 @@ export function profilePage(app, user){
     profileTableBody.appendChild(telemovelRow);
 
     // Linha para Username
-    const usernameRow = createTableRow("Uername:", user.username);
+    const usernameRow = createTableRow("Username:", user.username);
     profileTableBody.appendChild(usernameRow);
 
     // Linha para NIF
-    const nifRow = createTableRow("Username:", user.nif);
+    const nifRow = createTableRow("NIF:", user.nif);
     profileTableBody.appendChild(nifRow);
 
     // Linha para Morada
@@ -326,10 +330,13 @@ export function usersPage(app, users){
 
         const usersList = appContainer.querySelector('table.users_list tbody');
 
+        // Constroi as linhas da tabela com os dados dos utilizadores
         users.forEach((user) => {
             usersList.appendChild(createUserRow(user));
         });
 
+        // Como existem vários botões delete o evento é definido na tag <table>
+        // e depois o botão que foi clicado é apanhado no e.target
         const usersTable = appContainer.querySelector('table.users_list');
         usersTable.addEventListener("click", function(e){
             const delBtn = e.target.closest(".delete_button");
