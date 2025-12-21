@@ -1,6 +1,5 @@
 const express = require('express'); // Importa o Express (padrão da indústria em Node.js para criar servidores web, rotas API (REST) e middleware)
 const cors = require('cors');           // Para a segurança do frontend
-const bcrypt = require('bcrypt');   // Para hashing de passwords
 const helmet = require('helmet');   // Para segurança geral
 const morgan = require('morgan');   // Para logging dos pedidos HTTP do cliente
 const mongoose = require('mongoose'); // Importa o Mongoose para interação com a base de dados

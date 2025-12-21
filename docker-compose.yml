@@ -12,7 +12,6 @@ services:
       - /usr/src/app/node_modules 
     depends_on:
       - mongodb
-    command: nodemon -L server.js
     environment:
       # Variável que o Express vai ler para se ligar à base de dados
       # O host deve ser 'mongodb' (ou seja, o nome do serviço)
